@@ -44,20 +44,29 @@ $$E[X] = \sum\limits_x (x \times p(x)) = (1 \times \dfrac{1}{6}) + (2 \times \df
  
 ## Exercises
  
-1. A standard die takes the values 1, 2, 3, 4, 5, 6 with equal probability. What is the expected value?
+### Question 1
+A standard die takes the values 1, 2, 3, 4, 5, 6 with equal probability. What is the expected value?
 
-$$E[X] = \sum\limits_x (x \times p(x)) = (1 \times \dfrac{1}{6}) + (2 \times \dfrac{1}{6}) + (3 \times \dfrac{1}{6}) + 
-                                         (4 \times \dfrac{1}{6}) + (5 \times \dfrac{1}{6}) + (6 \times \dfrac{1}{6}) = \dfrac {21}{6} = 3.5$$
+$$E[X] = \sum\limits_x (x \times p(x)) 
+= (1 \times \dfrac{1}{6}) + (2 \times \dfrac{1}{6}) + (3 \times \dfrac{1}{6}) 
++ (4 \times \dfrac{1}{6}) + (5 \times \dfrac{1}{6}) + (6 \times \dfrac{1}{6}) 
+= \dfrac {21}{6} 
+= \color{blue}{3.5}$$
 
-2. Consider a density that is uniform from -1 to 1. (I.e. has height equal to 1/2 and looks like a box starting at -1 and ending at 1). What is the mean of this distribution?
+
+### Question 2
+Consider a density that is uniform from -1 to 1. (I.e. has height equal to 1/2 and looks like a box starting at -1 and ending at 1). What is the mean of this distribution?
 
 
-
+### Question 3
 3. If a population has mean $μ$ , what is the mean of the distribution of averages of 20 observations from this distribution?
 
 
-4. You are playing a game with a friend where you flip a coin and if it comes up heads you give her $X$ dollars and if it comes up tails she gives you YY dollars. The odds that the coin is heads is dd. What is your expected earnings? 
+### Question 4
+You are playing a game with a friend where you flip a coin and if it comes up heads you give her $X$ dollars and if it comes up tails she gives you $Y$ dollars. The odds that the coin is heads is $d$. What is your expected earnings? 
 
 
-5. If you roll ten standard dice, take their average, then repeat this process over and over and construct a histogram what would it be centered at? 
+### Question 5
+If you roll ten standard dice, take their average, then repeat this process over and over and construct a histogram what would it be centered at? 
+
 

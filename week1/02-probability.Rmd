@@ -15,7 +15,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 $$P(A) = 1 - P(A^c)$$
 
-* The probability of at least one of multiple things that are mutually exclusive occur is the sum of their probabilities
+* The probability of at least one of multiple events that are mutually exclusive occurring is the sum of their probabilities
 
 $$P(A \cup B) = P(A) + P(B)$$
 
@@ -38,7 +38,7 @@ Any value along a range, i.e. temperature, weight
 The probability mass function is associated with a discrete random variable.  PMF evaluated at a value corresponds 
 to the probability that a random variable takes that values.  To be a valid PMF function, *p*, must satisfy:  
 
-* Must always be >= 0  
+* Must always be $\geq 0$  
 * The sum of the possible values must add up to 1
 
 ## Probability Density Function (PDF)
@@ -46,12 +46,12 @@ to the probability that a random variable takes that values.  To be a valid PMF 
 The probability density function is associated to a continuous random variable.  The areas under PDFs correspond to 
 probabilities for that random variable.  To be a valid PDF function, it must satisfy:
 
-* Be >=0 everywhere
+* Be $\geq 0$ everywhere
 * Total area must be 1
 
 ### Example
 
-$f(x) = 2x$ for $0< x < 1$  
+$f(x) = 2x$ for $0 \leq x \leq 1$  
 
 ```{r echo=FALSE}
 x <- c( 0, 1, 1)
@@ -59,7 +59,7 @@ y <- c( 0, 2, 0)
 plot(x, y, lwd=3, frame=F, type='l')
 ```
 
-Area must be one for a PDF and the area of a triagle is $(h \times w)/2$.
+Area must be one for a PDF and the area of a triangle is $(h \times w)/2$.
 
 ```{r}
 (2 * 1) / 2
@@ -95,25 +95,28 @@ returns the probability that the random variable is less than or equal to the va
 
 $$F(x) = P(X \leq x)$$
 
-Somewhat important quote from swirl
+Note from swirl on CDF:
 
 > When the random variable is continuous, as in the example, the PDF is the derivative of the CDF. So
 > integrating the PDF (the line represented by the diagonal) yields the CDF. When you evaluate the
 > CDF at the limits of integration the result is an area.
 
-Surivor function is the compliment of the CDF
+Survivor function is the compliment of the CDF
 
 ## Exercises  
 
-1. Can you add the probabilities of any two events to get the probability of at least one occurring?
+### Question 1
+Can you add the probabilities of any two events to get the probability of at least one occurring?
 
 No, this only works for mutually exclusive events.  
 
-2. I define a PMF, pp so that for $x=0$ and $x=1$ we have $p(0)=−0.1$ and $p(1)=1.1$. Is this a valid PMF?
+### Question 2
+I define a PMF, $p$ so that for $x=0$ and $x=1$ we have $p(0)=−0.1$ and $p(1)=1.1$. Is this a valid PMF?
 
-No, it is invalid because the probabilies cannot be < 0
+No, it is invalid because the probabilities cannot be < 0
 
-3. What is the probability that 75% or fewer calls get answered in a randomly sampled day from the population distribution from this chapter?
+### Question 3
+What is the probability that 75% or fewer calls get answered in a randomly sampled day from the population distribution from this chapter?
 
 ```{r}
 # area under that portion of the triangle
@@ -123,11 +126,13 @@ No, it is invalid because the probabilies cannot be < 0
 pbeta(0.75, 2, 1)
 ```
 
-4. The 97.5th percentile of a distribution is?
+### Question 4
+The 97.5th percentile of a distribution is?
 
 The point at which 97.5% of the mass of the density lies below it.
 
-5. Consider influenza epidemics for two parent heterosexual families. Suppose that the probability is 15% that at least one of the parents has contracted the disease. The probability that the father has contracted influenza is 10% while that the mother contracted the disease is 9%. What is the probability that both contracted influenza expressed as a whole number percentage?
+### Question 5
+Consider influenza epidemics for two parent heterosexual families. Suppose that the probability is 15% that at least one of the parents has contracted the disease. The probability that the father has contracted influenza is 10% while that the mother contracted the disease is 9%. What is the probability that both contracted influenza expressed as a whole number percentage?
 
 $$P(M) = 0.10$$
 
@@ -137,10 +142,10 @@ $$P(M \cup F) = 0.15$$
 $$P(M) + P(F) - P(M \cap F)= 0.15$$
 $$0.10 + 0.09 - P(M \cap F)= 0.15$$
 $$P(M \cap F)= 0.04$$
+$$\color{blue}{4\%}$$
 
-
-
-6. A random variable, $X$, is uniform, a box from 0 to 1 of height 1. (So that it’s density is $f(x)=1$ for $0≤x≤1$.) 
+### Question 6
+A random variable, $X$, is uniform, a box from 0 to 1 of height 1. (So that it’s density is $f(x)=1$ for $0≤x≤1$.) 
 What is it’s median expressed to two decimal places?
 
 $f(x) = 1$
@@ -153,14 +158,14 @@ plot(x, y, lwd=3, frame=F, type='l')
 
 $f(x) = 1$
 
-$F(x) = P(X≤x) = Base \times Height = x$
+$F(x) = P(X≤x) = x \times 1.0 = x$
 
-Median (0.5) would be for $x = 0.50$
+Median (0.5) would be for $x = \color{blue}{0.50}$
 
+### Question 7
+If a continuous density that never touches the horizontal axis is symmetric about zero, can we say that its associated median is zero? 
 
-7.  If a continuous density that never touches the horizontal axis is symmetric about zero, can we say that its associated median is zero? 
-
-Yes
+Yes, because half of its mass is above zero and the other below.
 
 
 
