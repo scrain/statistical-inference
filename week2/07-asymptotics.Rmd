@@ -1,0 +1,262 @@
+---
+title: "Asymptotics"
+output: 
+  html_document:
+    toc: true
+    toc_depth: 4
+    fig_width: 10
+    fig_height: 8  
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(UsingR)
+library(knitr)
+library(reshape2)
+library(ggplot2)
+options(scipen=999)
+
+
+coinPlot <- function(n){
+  means <- cumsum(sample(0 : 1, n , replace = TRUE)) / (1  : n)
+  g <- ggplot(data.frame(x = 1 : n, y = means), aes(x = x, y = y)) 
+  g <- g + geom_hline(size=1.5 ,yintercept = 0.5,alpha=0.6,
+	linetype="longdash") + geom_line(size = 1)
+  if(n<100){
+   	g <- g + geom_point(colour="red",size=3,alpha=0.8)
+	}	 
+  g <- g + labs(x = "Number of obs", y = "Cumulative mean")
+  g <- g + scale_x_continuous(breaks=seq(0,n+1,ceiling(n/10)))
+  print(g)
+  invisible()
+}
+
+```
+
+## Definition
+
+**Asymptotics** is the behaviour of statistics as the sample size goes to infinity.
+
+##Law of Large Numbers (LLN)
+The averages of IID samples converge to the population means they are estimating.
+
+Example, generating random normals showing the mean as $n$ increases.
+
+```{r lawOfLargeNumbersInActionNorms}
+
+n <- 10000
+
+cumulativeMean <- cumsum(rnorm(n))/(1:n)
+
+plot(1:n, cumulativeMean, type='l' )
+abline(h=0, lty=2, col='red')
+```
+
+```{r lawOfLargeNumbersInActionCoinFlip}
+n <- 10000
+
+cumulativeMean <- cumsum(sample(0:1, n, replace=TRUE)) / (1:n)
+
+plot(1:n, cumulativeMean, type='l' )
+abline(h=0.5, lty=2, col='red')
+```
+
+* An estimator is **consistent** if it converges to what you want it to estimate  
+* The LLN says that the sample mean of IID samples is consistent for the population mean  
+
+
+## Central Limit Theorem (CLT)
+
+**CLT** states that the distribution of averages of **IID** variables becomes that of a standard normal as the sample size increases.
+
+## Confidence Intervals
+
+Sample mean $\bar{X}$  
+Population mean $\mu$  
+Standard deviation sd $\sigma$  
+
+95% interval for the population mean, $\mu$, is $\bar{X} \pm 2\sigma / \sqrt{n}$
+
+### Father / Son data
+
+```{r}
+data(father.son)
+
+x <- father.son$sheight
+n <- length(x)
+meanX <- mean(x)
+
+confidenceInterval = (meanX + c(-1,1) * qnorm(0.975) * sd(x)/sqrt(n))
+```
+
+confidence interval in inches `r round(confidenceInterval, 1)`  
+confidence interval in feet `r round(confidenceInterval / 12, 2)`  
+
+### Coin flips
+
+* $X_i$ is $0$ or $1$ with success probability $p$ then $\sigma^2 = p(1-p)$  
+
+
+### Example using sample proportions
+
+* For 95% intervals $\hat{p} \pm \dfrac{1}{\sqrt{n}}$ is a quick confidence interval (CI) estimate for $p$
+
+Out of a random sample of 100 likely voters, 56 intend to vote for you.  Can you relax?
+
+Estimate:
+
+$$\hat{p} \pm \dfrac{1}{\sqrt{n}} = \hat{p} \pm \dfrac{1} {\sqrt{100}} = \hat{p} \pm \dfrac{1} {10} = \hat{p} \pm 0.1$$
+
+$$ 0.56 \pm 0.1 = \{0.46, 0.66\}$$
+
+So, no, cannot relax according to estimate.
+
+
+* $\hat{p}$ sample probability  
+* $z$ is the $1 - \frac{1}{2}\sigma$ quantile of a standard normal distribution  
+
+
+$$\hat{p} \pm z\sqrt{\dfrac{p(1-p)}{n}}$$
+
+#### Using std error formula
+```{r}
+p <- 0.56
+n <- 100
+
+p + c(1,-1) * qnorm(0.975) * sqrt(p * (1 - p)/n) 
+```
+
+#### Using binom.test
+```{r}
+successes <- 56
+
+btest <- binom.test(successes, n)
+btest
+```
+
+Rough guidelines for 95% CI based on sample size: 100 for 1 decimal place, 10k for 2, 1M for 3.
+
+```{r}
+  n <- c(100, 10000, 1000000, 100000000)
+  CI <- round(1/sqrt(n), 4)
+  kable(data.frame(n, CI))
+```
+
+
+### Simulation of Confidence Intervals
+
+```{r}
+n <- 20
+pvals <- seq(0.1, 0.9, by = 0.05)
+nosim <- 1000
+
+n.equals.20 <- sapply(pvals, function(p) {
+    phats <- rbinom(nosim, prob = p, size = n)/n
+    ll <- phats - qnorm(0.975) * sqrt(phats * (1-phats)/n)
+    ul <- phats + qnorm(0.975) * sqrt(phats * (1-phats)/n)
+    mean(ll < p & ul > p)
+  }
+)
+
+# Agresti Coull,add two successes and two failures
+Agresti.Coull <- sapply(pvals, function(p) {
+    phats <- (rbinom(nosim, prob = p, size = n) + 2)/(n + 4)  # +2/+4
+    ll <- phats - qnorm(0.975) * sqrt(phats * (1-phats)/n)
+    ul <- phats + qnorm(0.975) * sqrt(phats * (1-phats)/n)
+    mean(ll < p & ul > p)
+  }
+)
+
+n <- 100
+n.equals.100 <- sapply(pvals, function(p) {
+    phats <- rbinom(nosim, prob = p, size = n)/n
+    ll <- phats - qnorm(0.975) * sqrt(phats * (1-phats)/n)
+    ul <- phats + qnorm(0.975) * sqrt(phats * (1-phats)/n)
+    mean(ll < p & ul > p)
+  }
+)
+
+df <- data.frame(pvals, n.equals.20, n.equals.100, Agresti.Coull)
+df <- melt(df, id.vars = 'pvals', value.name = 'coverage', variable.name = 'interval')
+
+ggplot(data=df, aes(x=pvals, y=coverage, color = interval)) + 
+  geom_line() +
+  geom_hline(yintercept = 0.95, linetype = 2)
+```
+
+
+## Poisson Interval
+
+A nuclear pump failed 5 times out of 94.32 days, give 95% CI for the failure rate per day.
+
+* $\lambda$ failure rate  
+* $t$ number of days  
+* $X \sim \text{Poisson}(\lambda t)$  
+* Estimate $\hat{\lambda} = X/t = 5/94.32 = `r 5/94.32`$ 
+* $\text{Var}(\hat{\lambda}) = \lambda/t$
+* $\hat{\lambda}/t$ is our variance estimate  
+
+### Using std error formula
+```{r}
+X <- 5
+t <- 94.32
+lambda <- X/t
+CI <- lambda + c(-1,1) * qnorm(0.975) * sqrt(lambda/t)
+round(CI, 3)
+```
+
+### Using poisson.test  
+```{r}
+poisson.test(X, T = t)
+```
+
+### Simulating Poisson Coverage
+
+```{r}
+lambdavals <- seq(0.005, 0.1, by = 0.01)
+nosim <- 1000
+t <- 100
+t.equals.100 <- sapply(lambdavals, function(lambda) {
+    lhats <- rpois(nosim, lambda = lambda * t)/t
+    ll <- lhats - qnorm(0.975) * sqrt(lhats/t)
+    ul <- lhats + qnorm(0.975) * sqrt(lhats/t)
+    mean(ll < lambda & ul > lambda)
+})
+
+t <- 1000
+t.equals.1000 <- sapply(lambdavals, function(lambda) {
+    lhats <- rpois(nosim, lambda = lambda * t)/t
+    ll <- lhats - qnorm(0.975) * sqrt(lhats/t)
+    ul <- lhats + qnorm(0.975) * sqrt(lhats/t)
+    mean(ll < lambda & ul > lambda)
+})
+
+t <- 10000
+t.equals.10000 <- sapply(lambdavals, function(lambda) {
+    lhats <- rpois(nosim, lambda = lambda * t)/t
+    ll <- lhats - qnorm(0.975) * sqrt(lhats/t)
+    ul <- lhats + qnorm(0.975) * sqrt(lhats/t)
+    mean(ll < lambda & ul > lambda)
+})
+
+df <- data.frame(lambdavals, t.equals.100, t.equals.1000, t.equals.10000)
+df <- melt(df, id.vars = 'lambdavals', value.name = 'coverage', variable.name = 'interval')
+
+ggplot(data=df, aes(x=lambdavals, y=coverage, color = interval)) + 
+  geom_line() +
+  geom_hline(yintercept = 0.95, linetype = 2)
+```
+
+## Summary
+
+* LLN states that averages of iid samples converge to the population means that they are estimating  
+* Central Limit Theorem (CLT) states that averages are approximately normal, with distributions  
+    * centered at the population mean  
+    * with standard deviation equal to the standard error of the mean  
+    * CLT gives no guarantee that $n$ is large enough  
+* Taking the mean and adding and subtracting the relevant normal quantile times the SE yields a confidence interval for the mean   
+    * Adding and subtracting 2 SEs works for 95% intervals  
+* Confidence intervals get wider as the coverage increases  
+* Confidence intervals get narrower with less variability or larger sample sizes   
+* The Poisson and binomial case have exact intervals that don’t require the CLT  
+    * But a quick fix for small sample size binomial calculations is to add 2 successes and failures   

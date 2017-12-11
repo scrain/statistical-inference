@@ -1,0 +1,71 @@
+---
+title: "Variance"
+output: 
+  html_document:
+    toc: true
+    toc_depth: 4
+    fig_width: 10
+    fig_height: 8  
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Definition
+
+For random variable $X$ with mean $\mu$, the variance of $X$ is:
+
+$$Var(X) = E[(X - \mu)^2] = E[X^2] - E[X]^2$$
+
+The square root of the variance is the standard deviation.
+
+## Binomial Variance Example
+
+```{r}
+p = seq(0 , 1, length = 1000)
+y = p * (1 - p)
+plot(p, y, type = "l", lwd = 3, frame = FALSE)
+```
+
+```{r}
+p.die <- rep(1/6,6)
+sum(p.die)
+die <- 1:6
+sample(die, size=10, prob=p.die, replace=T)
+s <- table(sample(die, size=1000, prob=p.die, replace=T))
+lbls = sprintf("%0.1f%%", s/sum(s)*100)
+barX <- barplot(s, ylim=c(0,220))
+text(x=barX, y=s+10, label=lbls)
+```
+
+```{r}
+generate.sample.means <- function(n) {
+  sample.means <- numeric()
+  for (i in 1:1000) { 
+    sample.means <- append(sample.means, sum(sample(die, size=n, prob=p.die, replace=T))/n)
+  }
+  return (sample.means)
+}
+sample.means <- generate.sample.means(100)
+plot(density(sample.means), main="Distribution of sample means",xlab="sample mean", col="orange")
+```
+
+## Summary
+
+ * Sample variance, $S^2$, estimates the population variance, $\sigma^2$  
+ * Distribution of sample variance $S^2$ is centered around $\sigma^2$  
+ * Variance of the sample mean, $Var(\bar{X})$, is $\dfrac{\sigma^2}{n}$  
+    * Logical estimate is $\dfrac{S^2}{n}$  
+    * Logical estimate of the standard error is $\sqrt{\dfrac{S^2}{n}} = \dfrac{S}{\sqrt{n}}$  
+ * Standard deviation, $S$, tells us how variable the population is  
+ * The standard error, $\dfrac{S}{\sqrt{n}}$, tells us how much averages of random samples of size $n$ from the population vary  
+
+
+$$Var(\bar{X}) = Var( \dfrac{\sum X_i}{n}) = \dfrac{1}{n^2}Var(\sum_{i=1}^{n}X_i) = \dfrac{1}{n^2}\sum_{i=1}^{n}{\sigma^2} = \dfrac{n {\sigma^2}}{n^2} = \dfrac{\sigma^2}{n}$$ 
+
+
+
+Chebyshev's inequality helps interpret variances. It states that the probability that a random variable X is at least k standard deviations
+| from its mean is less than 1/(k^2). In other words, the probability that X is at least 2 standard deviations from the mean is less than 1/4, 3 standard deviations 1/9, 4 standard
+| deviations 1/16, etc.

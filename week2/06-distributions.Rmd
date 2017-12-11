@@ -1,0 +1,44 @@
+---
+title: "Distributions"
+output: 
+  html_document:
+    toc: true
+    toc_depth: 4
+    fig_width: 10
+    fig_height: 8  
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Bernoulli distribution
+The Bernoulli distribution arises as the result of a binary outcome, such as a coin flip.
+
+* Variables take values 1 and 0 with probabilities of $p$ and $1-p$  
+* Probability Mass Function (PMF) for random variable $X$ is $P(X = x) = p^x(1-p)^{1-x}$
+* Mean is $p$
+* Variance is $p(1-p)$
+* Random variables that follow a Bernoulli distribution are denoted as $X \sim Bernoulli(p)$
+
+### Binomial distribution
+Binomial distribution is the discrete distribution of the number of successes, $k$, out of $n$ independent binary trials, 
+each with probability $p$ written as $X \sim Binomial(n, p)$
+
+* PMF $P(X=x) = {n \choose x}p^x(1-p)^{n-x}$
+
+## Normal distribution
+
+* Mean is $\mu$  
+* Variance is $\sigma^2$  
+* With $\mu = 0$ and $\sigma = 1$, the distribution, often labelled $Z$, is the **standard normal distribution** 
+* A normally distributed random variable is denoted as $X \sim N(\mu, \sigma^2)$
+
+## Poisson Distribution
+Poisson distribution models counts or number of event in some interval of time  
+
+* mean and variance are both $\lambda$  
+* Total monitoring time is $t$   
+* PMF of a Poisson distribution is $P(X=x;\lambda) = \dfrac{\lambda^x e^{-\lambda}}{x!}$  
+* When time is used, random variables following a Poisson distribution are denoted as $X \sim Poisson(\lambda t)$ where $\lambda = E[X/t]$  
+* If $n$ is large and $p$ is small, the Poisson distribution can be used to estimate the Binomial distribution where $\lambda = np$  
