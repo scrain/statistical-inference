@@ -189,6 +189,7 @@ The odds associated with a probability, $p$, are defined as?
 The odds are the ratio of the probability of an event to the probability of it not occurring (its compliment).
 
 $$\color{blue}{odds = \dfrac {p}{(1-p)}}$$
+
 ### Question 3
 The probability of getting two sixes when rolling a pair of dice is?
 
