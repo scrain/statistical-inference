@@ -57,9 +57,16 @@ $$E[X] = \sum\limits_x (x \times p(x))
 ### Question 2
 Consider a density that is uniform from -1 to 1. (I.e. has height equal to 1/2 and looks like a box starting at -1 and ending at 1). What is the mean of this distribution?
 
+```{r echo=FALSE}
+x <- c( -1, -1, 1, 1)
+y <- c(  0, 0.5, 0.5, 0)
+plot(x, y, lwd=3, frame=F, type='l')
+```
+
+
 
 ### Question 3
-3. If a population has mean $μ$ , what is the mean of the distribution of averages of 20 observations from this distribution?
+If a population has mean $μ$ , what is the mean of the distribution of averages of 20 observations from this distribution?
 
 
 ### Question 4
